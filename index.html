@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMU BASE</title>
+    <meta name="description" content="AMU BASE — クリエイターの秘密基地。Web アプリ、ゲーム、音楽の実験場。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=17">
+</head>
+<body>
+
+<!-- ===== FIXED NAV ===== -->
+<nav id="main-nav">
+    <span class="nav-logo">AMU BASE</span>
+    <ul class="nav-links">
+        <li><a href="#profile">PROFILE</a></li>
+        <li><a href="#media">MEDIA</a></li>
+        <li><a href="#music">MUSIC</a></li>
+        <li class="nav-item-apps"><a href="#apps">APPS</a></li>
+    </ul>
+</nav>
+
+<!-- ===== HERO / CANVAS BACKGROUND ===== -->
+<section id="hero">
+    <canvas id="nebula-canvas"></canvas>
+    <div class="hero-content">
+        <p class="hero-eyebrow">SECRET CREATIVE BASE</p>
+        <h1 class="hero-title">AMU BASE</h1>
+        <p class="hero-sub">アイデアを実験し、形にする場所。</p>
+        <div class="hero-scroll-cue">
+            <div class="scroll-mouse">
+                <div class="scroll-wheel"></div>
+            </div>
+            <span>SCROLL</span>
+        </div>
+    </div>
+    <div class="hero-counter">
+        <div class="counter-group">
+            <span class="counter-label">TRACKS</span>
+            <span class="counter-num" id="counter-tracks">4</span>
+        </div>
+        <div class="counter-group">
+            <span class="counter-label">APPS</span>
+            <span class="counter-num">8</span>
+        </div>
+        <div class="counter-group">
+            <span class="counter-label">PROJECTS</span>
+            <span class="counter-num">20+</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===== PROFILE SECTION ===== -->
+<section id="profile" class="section">
+    <div class="section-inner">
+        <div class="section-label">01 — PROFILE</div>
+        <div class="profile-grid">
+            <div class="profile-text">
+                <h2 class="section-heading">Creator &amp;<br>Base Commander.</h2>
+                <p class="profile-bio">
+                    音楽・Webアプリ・ゲーム・映像・LINEスタンプなどを横断するマルチクリエイター。<br>
+                    「触って楽しい」体験を探求し、形にすることが使命。<br>
+                    AMU BASE はそのための実験場であり、司令部。
+                </p>
+                <div class="profile-tags">
+                    <span class="tag">Music</span>
+                    <span class="tag">Web App</span>
+                    <span class="tag">Game Dev</span>
+                    <span class="tag">Video</span>
+                    <span class="tag">LINE Stickers</span>
+                    <span class="tag">AI Tools</span>
+                </div>
+                <div class="profile-socials">
+                    <a href="#media" class="social-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-1-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.29-2.61.76-5.26 2.72-6.98 1.64-1.45 3.86-2.14 6.04-1.89v4.14c-1.07-.15-2.18.15-3.03.82-.9.7-1.39 1.83-1.32 2.96.06 1.09.68 2.09 1.62 2.63.95.55 2.15.56 3.1.04.88-.47 1.48-1.38 1.57-2.38.06-1.92.02-3.85.02-5.77V.02z"/></svg>
+                        TikTok
+                    </a>
+                    <a href="#music" class="social-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                        Music
+                    </a>
+                    <a href="#apps" class="social-link profile-apps-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                        Apps
+                    </a>
+                </div>
+            </div>
+            <div class="profile-visual">
+                <div class="profile-photo-card">
+                    <div class="profile-photo-glow"></div>
+                    <img src="assets/amu_profile.jpg" alt="AMU BASE 司令官・公式キャラクター" class="profile-photo-img">
+                    <div class="profile-photo-badge">
+                        <span class="badge-dot"></span>
+                        <span>BASE COMMANDER</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== MEDIA SECTION ===== -->
+<section id="media" class="section section-dark">
+    <div class="section-inner">
+        <div class="section-label">02 — MEDIA</div>
+        <h2 class="section-heading">TikTok Videos.</h2>
+        <p class="section-sub">AiMu 公式 TikTok のおすすめオリジナル楽曲・制作ショート動画。</p>
+
+        <!-- TikTok Grid (3 videos side-by-side with Click-to-Play facade) -->
+        <div class="tiktok-grid">
+            <!-- Video 1: Air -->
+            <div class="tiktok-facade-card" onclick="activateTikTok(this)" data-video-id="7675720561779068178" data-cite="https://www.tiktok.com/@aimusic887/video/7675720561779068178">
+                <img src="assets/tiktok_thumb_1.jpg" alt="Air... / AiMu" class="tiktok-facade-thumb">
+                <div class="tiktok-facade-overlay">
+                    <div class="tiktok-facade-top">
+                        <span class="tiktok-badge">TikTok</span>
+                    </div>
+                    <div class="tiktok-play-btn" title="タップして再生">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                    <div class="tiktok-facade-info">
+                        <p class="tiktok-facade-caption">ーー空気みたいに当たり前だと思ってた。君がいなくなって、初めて息ができないと知った。ーー</p>
+                        <div class="tiktok-facade-meta">
+                            <span class="tiktok-author">AiMu（あいみゅ）</span>
+                            <span class="tiktok-tag">#Air</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 2: 待ち時間1曲チャレンジ -->
+            <div class="tiktok-facade-card" onclick="activateTikTok(this)" data-video-id="7675214764347280647" data-cite="https://www.tiktok.com/@aimusic887/video/7675214764347280647">
+                <img src="assets/tiktok_thumb_2.jpg" alt="綺麗な窒息 / AiMu" class="tiktok-facade-thumb">
+                <div class="tiktok-facade-overlay">
+                    <div class="tiktok-facade-top">
+                        <span class="tiktok-badge">TikTok</span>
+                    </div>
+                    <div class="tiktok-play-btn" title="タップして再生">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                    <div class="tiktok-facade-info">
+                        <p class="tiktok-facade-caption">待ち時間で1曲作れるかチャレンジ！見事？1時間15分で作れました👏👏👏👏</p>
+                        <div class="tiktok-facade-meta">
+                            <span class="tiktok-author">AiMu（あいみゅ）</span>
+                            <span class="tiktok-tag">#オリジナル曲</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 3: 天ロック (Crown of Sand) -->
+            <div class="tiktok-facade-card" onclick="activateTikTok(this)" data-video-id="7674075327013899538" data-cite="https://www.tiktok.com/@aimusic887/video/7674075327013899538">
+                <img src="assets/tiktok_thumb_3.jpg" alt="Crown of Sand / AiMu" class="tiktok-facade-thumb">
+                <div class="tiktok-facade-overlay">
+                    <div class="tiktok-facade-top">
+                        <span class="tiktok-badge">TikTok</span>
+                    </div>
+                    <div class="tiktok-play-btn" title="タップして再生">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                    <div class="tiktok-facade-info">
+                        <p class="tiktok-facade-caption">投稿作品第二弾です！ 天ROCK FEST Official</p>
+                        <div class="tiktok-facade-meta">
+                            <span class="tiktok-author">AiMu（あいみゅ）</span>
+                            <span class="tiktok-tag">#天ロック</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== MUSIC SECTION ===== -->
+<section id="music" class="section">
+    <div class="section-inner">
+        <div class="section-label">03 — MUSIC</div>
+        <div class="section-header-row">
+            <div class="music-title-group">
+                <div class="music-brand-logo-wrap">
+                    <img src="assets/amu_sounds_logo.png" alt="AMU SOUNDS — MUSIC STREAMING SERVICE" class="music-brand-logo">
+                </div>
+                <p class="section-sub">AMU BASE 公式ストリーミング。Suno AI で制作されたオリジナル楽曲の試聴プレイヤー。</p>
+            </div>
+            <div class="music-actions">
+                <div class="suno-link-bar">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    <input type="text" id="suno-playlist-input" placeholder="SunoプレイリストURL / ID" value="https://suno.com/s/QYT4yQwzCISNd78M">
+                    <button id="suno-sync-btn" class="suno-sync-btn" onclick="applySunoPlaylist()">
+                        <span>連携</span>
+                    </button>
+                </div>
+                <input type="file" id="track-file-input" accept="audio/*" multiple style="display:none">
+                <button id="add-track-btn" class="cyber-btn" onclick="document.getElementById('track-file-input').click()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                    <span>+ MP3/WAV</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="music-station crystal-theme">
+            <!-- Left: Crystal Glass Player -->
+            <div class="crystal-player-card">
+                <!-- Prism Highlights / Sparkles -->
+                <div class="crystal-sparkle sp-top-left"></div>
+                <div class="crystal-sparkle sp-top-right"></div>
+                <div class="crystal-sparkle sp-bottom-left"></div>
+                <div class="crystal-sparkle sp-bottom-right"></div>
+
+                <!-- Ambient Fluid Visualizer Canvas inside glass -->
+                <canvas id="music-visualizer" class="crystal-visualizer-canvas"></canvas>
+
+                <div class="crystal-player-body">
+                    <!-- Left: Artwork -->
+                    <div class="crystal-artwork-box">
+                        <img id="player-cover-img" src="https://cdn2.suno.ai/a4fb2235-c74d-4a27-992d-8f4699f7681b_9c652da9.jpeg" alt="Artwork" class="crystal-cover-img">
+                        <div class="crystal-artwork-shine"></div>
+                    </div>
+
+                    <!-- Right Column: Info + Seeker + Controls (Exact match to uploaded image) -->
+                    <div class="crystal-right-col">
+                        <!-- Top: Title, Artist, and top-right Repeat / Shuffle buttons -->
+                        <div class="crystal-header-bar">
+                            <div class="crystal-meta">
+                                <h3 class="crystal-title" id="player-title">サレ</h3>
+                                <p class="crystal-artist" id="player-artist">AiMu</p>
+                            </div>
+                            <div class="crystal-sub-actions">
+                                <button class="crystal-btn btn-sm" id="repeat-btn" title="リピート">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 2l4 4-4 4M3 11v-1a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v1a4 4 0 0 1-4 4H3"/></svg>
+                                </button>
+                                <button class="crystal-btn btn-sm" id="shuffle-btn" title="シャッフル">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Middle: Rainbow Prism Progress Bar -->
+                        <div class="crystal-seek-wrap">
+                            <div class="crystal-seek-bar" id="seek-bar-container">
+                                <div class="crystal-seek-fill" id="seek-bar-fill"></div>
+                                <div class="crystal-seek-thumb" id="seek-bar-thumb"></div>
+                            </div>
+                            <div class="crystal-time-row">
+                                <span id="player-current-time">0:00</span>
+                                <span id="player-total-time">3:30</span>
+                            </div>
+                        </div>
+
+                        <!-- Bottom: Controls (Prev, Play/Pause Hero, Next, Stop) + Volume -->
+                        <div class="crystal-controls-bar">
+                            <div class="crystal-controls-group">
+                                <button class="crystal-btn btn-md" id="prev-btn" title="前の曲">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2.5v12H6zm3.5 6l9 6V6z"/></svg>
+                                </button>
+                                <button class="crystal-btn btn-lg play-hero" id="play-btn" title="再生 / 一時停止">
+                                    <svg id="play-icon" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style="margin-left:3px;"><path d="M8 5v14l11-7z"/></svg>
+                                    <svg id="pause-icon" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                </button>
+                                <button class="crystal-btn btn-md" id="next-btn" title="次の曲">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l9-6-9-6v12zM15.5 6H18v12h-2.5z"/></svg>
+                                </button>
+                                <button class="crystal-btn btn-md" id="stop-btn" title="停止">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2.5"/></svg>
+                                </button>
+                            </div>
+
+                            <div class="crystal-vol-group">
+                                <button class="crystal-btn btn-sm" id="vol-mute-btn" title="ミュート切替">
+                                    <svg id="vol-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                                </button>
+                                <input type="range" id="vol-slider" min="0" max="1" step="0.01" value="0.8" class="crystal-slider">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Tracklist & Drag and drop -->
+            <div class="crystal-playlist-card">
+                <div class="playlist-header">
+                    <div class="playlist-title">TRACK LIST (<span id="track-count">0</span>)</div>
+                    <span class="playlist-hint">クリックで即時再生</span>
+                </div>
+
+                <!-- Dropzone / Drag Area -->
+                <div class="track-dropzone crystal-dropzone" id="track-dropzone">
+                    <div class="dropzone-inner">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                        <span>音声ファイルをここにドラッグ＆ドロップで追加</span>
+                    </div>
+                </div>
+
+                <!-- Track list -->
+                <div class="track-list" id="track-list">
+                    <!-- Dynamic rendering -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== APPS SECTION ===== -->
+<section id="apps" class="section section-dark">
+    <div class="section-inner">
+        <div class="section-label">04 — APPS</div>
+        <h2 class="section-heading">Built at the Base.</h2>
+        <p class="section-sub">AMU BASE で制作・実験したオリジナルアプリ＆ゲーム一覧。</p>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <button class="filter-btn active" data-tag="all">ALL</button>
+            <button class="filter-btn" data-tag="game">GAME</button>
+            <button class="filter-btn" data-tag="music">MUSIC</button>
+            <button class="filter-btn" data-tag="tool">TOOL</button>
+        </div>
+
+        <!-- App Grid -->
+        <div class="app-grid" id="app-grid"></div>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer id="footer">
+    <div class="footer-inner">
+        <span class="footer-logo">AMU BASE</span>
+        <span class="footer-copy">© 2026 AMU BASE. All rights reserved.</span>
+    </div>
+</footer>
+
+<!-- ===== FLOATING SPOTIFY PLAYER ===== -->
+<div id="spotify-player" class="spotify-player collapsed">
+    <button id="spotify-toggle" class="spotify-toggle-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.376 0 0 5.377 0 12s5.376 12 12 12 12-5.377 12-12S18.624 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.02 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.18-1.38-.72-.18-.6.18-1.2.72-1.38 4.26-1.26 11.28-1.02 15.721 1.62.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+        <span>MUSIC</span>
+    </button>
+    <div class="spotify-content">
+        <div class="spotify-header">
+            <span>🎵 Now Playing</span>
+            <button class="spotify-close-btn" id="spotify-close">✕</button>
+        </div>
+        <iframe id="sp-iframe" style="border-radius:8px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M?utm_source=generator&theme=0" width="100%" height="220" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        <div class="spotify-presets">
+            <button onclick="loadSP('playlist/37i9dQZF1DXcBWIGoYBM5M',this)" class="sp-btn active">Lo-Fi Focus</button>
+            <button onclick="loadSP('playlist/37i9dQZF1DX4wyAs2vE2uM',this)" class="sp-btn">Synthwave</button>
+            <button onclick="loadSP('playlist/37i9dQZF1DXdLEN7aqioXM',this)" class="sp-btn">Gaming</button>
+        </div>
+        <div class="custom-input-row sp-custom">
+            <input id="sp-url-input" type="text" placeholder="Spotify URL">
+            <button onclick="applySP()">→</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== APP MODAL ===== -->
+<div id="app-modal" class="modal-overlay">
+    <div class="modal-box">
+        <button class="modal-close" id="modal-close">✕</button>
+        <div class="modal-icon" id="modal-icon">🚀</div>
+        <span class="modal-tag" id="modal-tag">GAME</span>
+        <h3 class="modal-title" id="modal-title">App Title</h3>
+        <p class="modal-desc" id="modal-desc">Description here.</p>
+        <div class="modal-stack" id="modal-stack"></div>
+        <a id="modal-link" href="#" target="_blank" class="modal-launch-btn">Launch App →</a>
+    </div>
+</div>
+
+<script src="app.js?v=17"></script>
+</body>
+</html>

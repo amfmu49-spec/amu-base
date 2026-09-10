@@ -1,0 +1,9 @@
+# Python scratch & dumps
+*.py
+suno_page.html
+suno_api_resp.json
+script108.js
+
+# OS files
+.DS_Store
+Thumbs.db
