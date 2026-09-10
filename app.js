@@ -376,7 +376,7 @@ let tracks = [
         durationSec: 210,
         type: 'audio',
         url: 'https://cdn1.suno.ai/a4fb2235-c74d-4a27-992d-8f4699f7681b.mp4',
-        fallbackUrl: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/a4fb2235-c74d-4a27-992d-8f4699f7681b.m4a',
+        fallbackUrl: 'https://cdn1.suno.ai/a4fb2235-c74d-4a27-992d-8f4699f7681b.mp4',
         desc: 'Title: サレ  [Verse 1]   甘い香り　残したまま   帰らない理由を並べてる   既読だけが増えていく'
     },
     {
@@ -390,7 +390,7 @@ let tracks = [
         durationSec: 193,
         type: 'audio',
         url: 'https://cdn1.suno.ai/e98116db-e2b8-407e-a95e-c273583781fc.mp4',
-        fallbackUrl: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/e98116db-e2b8-407e-a95e-c273583781fc.m4a',
+        fallbackUrl: 'https://cdn1.suno.ai/e98116db-e2b8-407e-a95e-c273583781fc.mp4',
         desc: ' [Intro] [Creepy Laughter] アハハハ…ねぇ、痛い？（笑）  [Verse 1] [Cynica'
     },
     {
@@ -404,7 +404,7 @@ let tracks = [
         durationSec: 183,
         type: 'audio',
         url: 'https://cdn1.suno.ai/e5b76158-ddd9-4247-bda4-818c57f948f8.mp4',
-        fallbackUrl: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/e5b76158-ddd9-4247-bda4-818c57f948f8.m4a',
+        fallbackUrl: 'https://cdn1.suno.ai/e5b76158-ddd9-4247-bda4-818c57f948f8.mp4',
         desc: '[Chorus - 出だしサビ] Liar    Liar こんな事なら知りたくなかった Liar    Liar せめ'
     },
     {
@@ -417,8 +417,8 @@ let tracks = [
         durationStr: '4:34',
         durationSec: 274,
         type: 'audio',
-        url: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/02676cd6-745f-404a-9314-ae11d1346819.m4a',
-        fallbackUrl: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/02676cd6-745f-404a-9314-ae11d1346819.m4a',
+        url: 'https://cdn1.suno.ai/02676cd6-745f-404a-9314-ae11d1346819.mp4',
+        fallbackUrl: 'https://cdn1.suno.ai/02676cd6-745f-404a-9314-ae11d1346819.mp4',
         desc: '[Intro] [Verse 1] [Vocal: Soft, reflective, close mic] 当たり前す'
     },
     {
@@ -431,8 +431,8 @@ let tracks = [
         durationStr: '4:00',
         durationSec: 240,
         type: 'audio',
-        url: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/a3266693-42b9-41e7-aa2b-aa09d277c0ae.m4a',
-        fallbackUrl: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/a3266693-42b9-41e7-aa2b-aa09d277c0ae.m4a',
+        url: 'https://cdn1.suno.ai/a3266693-42b9-41e7-aa2b-aa09d277c0ae.mp4',
+        fallbackUrl: 'https://cdn1.suno.ai/a3266693-42b9-41e7-aa2b-aa09d277c0ae.mp4',
         desc: '[Style: Slow-tempo Alternative J-Pop, Down-tempo, Atmospheri'
     },
     {
@@ -445,8 +445,8 @@ let tracks = [
         durationStr: '4:38',
         durationSec: 278,
         type: 'audio',
-        url: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/40832b2a-bb61-43df-8128-3896b9e7b658.m4a',
-        fallbackUrl: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/40832b2a-bb61-43df-8128-3896b9e7b658.m4a',
+        url: 'https://cdn1.suno.ai/40832b2a-bb61-43df-8128-3896b9e7b658.mp4',
+        fallbackUrl: 'https://cdn1.suno.ai/40832b2a-bb61-43df-8128-3896b9e7b658.mp4',
         desc: '[Wide Stereo Intro] [Eerie noise panned left and right, heav'
     },
     {
@@ -459,8 +459,8 @@ let tracks = [
         durationStr: '4:21',
         durationSec: 261,
         type: 'audio',
-        url: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/16e08c7a-b287-4d6a-ba79-5cbc524c3c44.m4a',
-        fallbackUrl: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/16e08c7a-b287-4d6a-ba79-5cbc524c3c44.m4a',
+        url: 'https://cdn1.suno.ai/16e08c7a-b287-4d6a-ba79-5cbc524c3c44.mp4',
+        fallbackUrl: 'https://cdn1.suno.ai/16e08c7a-b287-4d6a-ba79-5cbc524c3c44.mp4',
         desc: '[Intro] [Vocal: Whisper, Lethargic, Dark] (Ah...) パイポ　パイポ　パイ'
     },
     {
@@ -473,8 +473,8 @@ let tracks = [
         durationStr: '3:55',
         durationSec: 235,
         type: 'audio',
-        url: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/353415f7-5af7-476d-8ab1-a8f029c00262.m4a',
-        fallbackUrl: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/353415f7-5af7-476d-8ab1-a8f029c00262.m4a',
+        url: 'https://cdn1.suno.ai/353415f7-5af7-476d-8ab1-a8f029c00262.mp4',
+        fallbackUrl: 'https://cdn1.suno.ai/353415f7-5af7-476d-8ab1-a8f029c00262.mp4',
         desc: '[Style: Alternative Rock, Visual Kei, J-Rock, Heavy Guitar, '
     },
     {
@@ -487,8 +487,8 @@ let tracks = [
         durationStr: '4:08',
         durationSec: 248,
         type: 'audio',
-        url: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/ed6a3383-6f9d-49eb-b5b0-59b56ecfcb2e.m4a',
-        fallbackUrl: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/ed6a3383-6f9d-49eb-b5b0-59b56ecfcb2e.m4a',
+        url: 'https://cdn1.suno.ai/ed6a3383-6f9d-49eb-b5b0-59b56ecfcb2e.mp4',
+        fallbackUrl: 'https://cdn1.suno.ai/ed6a3383-6f9d-49eb-b5b0-59b56ecfcb2e.mp4',
         desc: '[Style: showa kayo rock, jazz rock, melancholic minor key, w'
     },
     {
@@ -501,8 +501,8 @@ let tracks = [
         durationStr: '4:13',
         durationSec: 253,
         type: 'audio',
-        url: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/49d04afe-63a3-49e6-bb27-ccff8db56d71.m4a',
-        fallbackUrl: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/49d04afe-63a3-49e6-bb27-ccff8db56d71.m4a',
+        url: 'https://cdn1.suno.ai/49d04afe-63a3-49e6-bb27-ccff8db56d71.mp4',
+        fallbackUrl: 'https://cdn1.suno.ai/49d04afe-63a3-49e6-bb27-ccff8db56d71.mp4',
         desc: '[Intro] (Delicate piano and ambient clean guitar) [Verse 1] '
     },
     {
@@ -515,8 +515,8 @@ let tracks = [
         durationStr: '3:24',
         durationSec: 204,
         type: 'audio',
-        url: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/c903f9b8-8711-4bb3-b7cc-7fe8447ef651.m4a',
-        fallbackUrl: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/c903f9b8-8711-4bb3-b7cc-7fe8447ef651.m4a',
+        url: 'https://cdn1.suno.ai/c903f9b8-8711-4bb3-b7cc-7fe8447ef651.mp4',
+        fallbackUrl: 'https://cdn1.suno.ai/c903f9b8-8711-4bb3-b7cc-7fe8447ef651.mp4',
         desc: '[Intro: 歪んだ音色のオルゴールがシューベルトの子守唄を奏でる。不穏なストリングスが重なり、急に重いギターのフィー'
     },
     {
@@ -529,8 +529,8 @@ let tracks = [
         durationStr: '3:54',
         durationSec: 234,
         type: 'audio',
-        url: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/edaef7e9-3585-4c54-b3a9-c0dc4cc96667.m4a',
-        fallbackUrl: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/edaef7e9-3585-4c54-b3a9-c0dc4cc96667.m4a',
+        url: 'https://cdn1.suno.ai/edaef7e9-3585-4c54-b3a9-c0dc4cc96667.mp4',
+        fallbackUrl: 'https://cdn1.suno.ai/edaef7e9-3585-4c54-b3a9-c0dc4cc96667.mp4',
         desc: 'Intro  (Swoosh) (Voice Effect: “0과 1… 우리만의 코드, B1NARY.”) (Di'
     },
     {
@@ -543,8 +543,8 @@ let tracks = [
         durationStr: '4:25',
         durationSec: 265,
         type: 'audio',
-        url: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/93d0109b-23aa-4782-bb4f-604f87db5bb2.m4a',
-        fallbackUrl: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/93d0109b-23aa-4782-bb4f-604f87db5bb2.m4a',
+        url: 'https://cdn1.suno.ai/93d0109b-23aa-4782-bb4f-604f87db5bb2.mp4',
+        fallbackUrl: 'https://cdn1.suno.ai/93d0109b-23aa-4782-bb4f-604f87db5bb2.mp4',
         desc: 'Verse 1  ふるびたまんしょん　さんがいのあんしょ ろくじょうのこどもべや　みらいだけらんちょう はがれたかべがみ'
     },
     {
@@ -557,8 +557,8 @@ let tracks = [
         durationStr: '3:16',
         durationSec: 196,
         type: 'audio',
-        url: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/195a313c-79d0-4200-a3ab-0b07586966e2.m4a',
-        fallbackUrl: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/195a313c-79d0-4200-a3ab-0b07586966e2.m4a',
+        url: 'https://cdn1.suno.ai/195a313c-79d0-4200-a3ab-0b07586966e2.mp4',
+        fallbackUrl: 'https://cdn1.suno.ai/195a313c-79d0-4200-a3ab-0b07586966e2.mp4',
         desc: 'Verse 1  君のいない朝　やけに静かで 残ったマグに　触れる指先 気づかないふり　してただけ  Verse 2  '
     },
     {
@@ -571,8 +571,8 @@ let tracks = [
         durationStr: '3:57',
         durationSec: 237,
         type: 'audio',
-        url: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/ef28e963-4275-4b80-8068-02ca81b8e491.m4a',
-        fallbackUrl: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/ef28e963-4275-4b80-8068-02ca81b8e491.m4a',
+        url: 'https://cdn1.suno.ai/ef28e963-4275-4b80-8068-02ca81b8e491.mp4',
+        fallbackUrl: 'https://cdn1.suno.ai/ef28e963-4275-4b80-8068-02ca81b8e491.mp4',
         desc: 'Intro 街の灯り　ふゆのくうき 夜が少し賑やかで ツリーの下　通るだけで 胸の奥が痛む  Verse1 あなたのせい'
     },
     {
@@ -585,8 +585,8 @@ let tracks = [
         durationStr: '5:23',
         durationSec: 323,
         type: 'audio',
-        url: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/1e348292-26d8-47dc-9d33-4c2dbc33f8fd.m4a',
-        fallbackUrl: 'https://d2lwuy8qc234o3.cloudfront.net/1/clip/1e348292-26d8-47dc-9d33-4c2dbc33f8fd.m4a',
+        url: 'https://cdn1.suno.ai/1e348292-26d8-47dc-9d33-4c2dbc33f8fd.mp4',
+        fallbackUrl: 'https://cdn1.suno.ai/1e348292-26d8-47dc-9d33-4c2dbc33f8fd.mp4',
         desc: '[Verse 1] ねぇ　僕はどこにいるの？ 心の中は　からっぽで ひとの中の評価でしか 自分の存在を確かめられない  '
     }
 ];
@@ -743,11 +743,20 @@ function initAudioContext() {
         masterGain.connect(analyser);
         analyser.connect(audioCtx.destination);
 
-        // HTML Audio element for uploaded mp3/wav
+        // HTML Audio element — do NOT set crossOrigin here.
+        // Suno CDN does NOT send CORS headers, so setting crossOrigin='anonymous'
+        // causes the browser to block the request entirely (even when the file
+        // would otherwise load fine without CORS validation).
         audioElement = new Audio();
-        audioElement.crossOrigin = 'anonymous';
-        audioSourceNode = audioCtx.createMediaElementSource(audioElement);
-        audioSourceNode.connect(masterGain);
+        // Attempt to wire through Web Audio API for visualizer support.
+        // If CORS blocks it we still want audio to play, so catch the error.
+        try {
+            audioSourceNode = audioCtx.createMediaElementSource(audioElement);
+            audioSourceNode.connect(masterGain);
+        } catch (e) {
+            console.warn('Web Audio API routing unavailable (CORS). Falling back to direct <audio> playback.', e);
+            audioSourceNode = null;
+        }
 
         audioElement.addEventListener('timeupdate', () => {
             if (isPlaying && tracks[currentTrackIndex].type === 'audio') {
@@ -961,7 +970,6 @@ function initVisualizer() {
     draw();
 }
 
-// ── Music Player Controls & State ─────────────────────────────────────────────
 function selectTrack(index, autoPlay = true) {
     if (index < 0 || index >= tracks.length) return;
     currentTrackIndex = index;
@@ -982,8 +990,10 @@ function selectTrack(index, autoPlay = true) {
     if (totalTimeEl) totalTimeEl.textContent = track.durationStr;
     if (currTimeEl) currTimeEl.textContent = '0:00';
 
-    document.getElementById('seek-bar-fill').style.width = '0%';
-    document.getElementById('seek-bar-thumb').style.left = '0%';
+    const fill = document.getElementById('seek-bar-fill');
+    const thumb = document.getElementById('seek-bar-thumb');
+    if (fill) fill.style.width = '0%';
+    if (thumb) thumb.style.left = '0%';
 
     renderTrackList();
 
@@ -1006,16 +1016,14 @@ function startPlay() {
 
     if (track.type === 'audio') {
         if (synthTimer) { clearInterval(synthTimer); synthTimer = null; }
-        if (!audioElement.src || (!audioElement.src.includes(track.url) && audioElement.src !== track.url)) {
-            audioElement.src = track.url;
-            audioElement.load();
-        }
-        if (trackCurrentSeconds > 0) {
-            audioElement.currentTime = trackCurrentSeconds;
-        }
+        // Apply volume via element too (fallback when not routed through Web Audio)
+        audioElement.volume = isMuted ? 0 : audioVolume;
+        // Always re-assign src to guarantee correct track loads
+        audioElement.src = track.url;
+        audioElement.load();
         audioElement.play().catch(e => {
-            console.warn('Primary audio playback error:', e);
-            if (track.fallbackUrl && audioElement.src !== track.fallbackUrl) {
+            console.warn('Primary audio playback error:', e.message || e);
+            if (track.fallbackUrl && track.fallbackUrl !== track.url) {
                 console.log('Switching to fallback audio URL:', track.fallbackUrl);
                 audioElement.src = track.fallbackUrl;
                 audioElement.load();
@@ -1305,6 +1313,7 @@ function initMusicStation() {
             audioVolume = parseFloat(e.target.value);
             isMuted = false;
             if (masterGain) masterGain.gain.value = audioVolume;
+            if (audioElement) audioElement.volume = audioVolume;
         });
     }
     if (volMuteBtn) {
@@ -1313,6 +1322,7 @@ function initMusicStation() {
             if (masterGain) {
                 masterGain.gain.value = isMuted ? 0 : audioVolume;
             }
+            if (audioElement) audioElement.volume = isMuted ? 0 : audioVolume;
             volSlider.value = isMuted ? 0 : audioVolume;
         });
     }
