@@ -2,6 +2,9 @@
 *.py
 suno_page.html
 suno_api_resp.json
+suno_full_16.json
+tracks_code.js
+tracks_generated.json
 script108.js
 
 # OS files
