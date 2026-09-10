@@ -765,21 +765,30 @@ function getSunoSongId(track) {
     return null;
 }
 
+let currentIframe = null;
+
 function setSunoEmbed(songId) {
-    const iframe = document.getElementById('suno-embed-iframe');
-    if (!iframe) return;
-    if (songId) {
-        iframe.src = `https://suno.com/embed/${songId}?utm_source=embed`;
-    } else {
-        iframe.src = '';
-    }
+    clearSunoEmbed();
+    if (!songId) return;
+    
+    currentIframe = document.createElement('iframe');
+    currentIframe.id = 'suno-embed-iframe-dynamic';
+    currentIframe.src = `https://suno.com/embed/${songId}?autoplay=1`;
+    currentIframe.style.position = 'absolute';
+    currentIframe.style.width = '0';
+    currentIframe.style.height = '0';
+    currentIframe.style.border = 'none';
+    currentIframe.allow = 'autoplay; encrypted-media';
+    document.body.appendChild(currentIframe);
 }
 
 function clearSunoEmbed() {
-    const iframe = document.getElementById('suno-embed-iframe');
-    if (!iframe) return;
-    iframe.src = '';
+    if (currentIframe) {
+        currentIframe.remove();
+        currentIframe = null;
+    }
 }
+
 
 
 // ── Synthesizer Music Generation Engine ──────────────────────────────────────
