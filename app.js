@@ -729,6 +729,8 @@ let synthStep = 0;
 let isVisualizerRunning = false;
 
 function initAudioContext() {
+    // Web Audio API is used for Visualizer / Synth sounds only.
+    // Suno tracks are played via the hidden iframe embed — no CORS issues.
     if (!audioCtx) {
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
         audioCtx = new AudioContextClass();
@@ -743,32 +745,6 @@ function initAudioContext() {
         masterGain.connect(analyser);
         analyser.connect(audioCtx.destination);
 
-        // HTML Audio element — do NOT set crossOrigin here.
-        // Suno CDN does NOT send CORS headers, so setting crossOrigin='anonymous'
-        // causes the browser to block the request entirely (even when the file
-        // would otherwise load fine without CORS validation).
-        audioElement = new Audio();
-        // Attempt to wire through Web Audio API for visualizer support.
-        // If CORS blocks it we still want audio to play, so catch the error.
-        try {
-            audioSourceNode = audioCtx.createMediaElementSource(audioElement);
-            audioSourceNode.connect(masterGain);
-        } catch (e) {
-            console.warn('Web Audio API routing unavailable (CORS). Falling back to direct <audio> playback.', e);
-            audioSourceNode = null;
-        }
-
-        audioElement.addEventListener('timeupdate', () => {
-            if (isPlaying && tracks[currentTrackIndex].type === 'audio') {
-                trackCurrentSeconds = audioElement.currentTime;
-                updateProgressBar();
-            }
-        });
-
-        audioElement.addEventListener('ended', () => {
-            handleTrackEnd();
-        });
-
         initVisualizer();
     }
 
@@ -776,6 +752,35 @@ function initAudioContext() {
         audioCtx.resume();
     }
 }
+
+// ── Suno Embed Helper ─────────────────────────────────────────────────────────
+function getSunoSongId(track) {
+    // Extract UUID from id like 'suno-a4fb2235' → 'a4fb2235-c74d-...'
+    // The track.url has the full UUID: https://cdn1.suno.ai/{uuid}.mp4
+    const urlMatch = (track.url || '').match(/\/([0-9a-f-]{36})\.mp4/);
+    if (urlMatch) return urlMatch[1];
+    // Fallback: try cover image URL which contains full UUID
+    const coverMatch = (track.cover || '').match(/\/([0-9a-f-]{36})/);
+    if (coverMatch) return coverMatch[1];
+    return null;
+}
+
+function setSunoEmbed(songId) {
+    const iframe = document.getElementById('suno-embed-iframe');
+    if (!iframe) return;
+    if (songId) {
+        iframe.src = `https://suno.com/embed/${songId}?utm_source=embed`;
+    } else {
+        iframe.src = '';
+    }
+}
+
+function clearSunoEmbed() {
+    const iframe = document.getElementById('suno-embed-iframe');
+    if (!iframe) return;
+    iframe.src = '';
+}
+
 
 // ── Synthesizer Music Generation Engine ──────────────────────────────────────
 function playSynthStep() {
@@ -1016,22 +1021,27 @@ function startPlay() {
 
     if (track.type === 'audio') {
         if (synthTimer) { clearInterval(synthTimer); synthTimer = null; }
-        // Apply volume via element too (fallback when not routed through Web Audio)
-        audioElement.volume = isMuted ? 0 : audioVolume;
-        // Always re-assign src to guarantee correct track loads
-        audioElement.src = track.url;
-        audioElement.load();
-        audioElement.play().catch(e => {
-            console.warn('Primary audio playback error:', e.message || e);
-            if (track.fallbackUrl && track.fallbackUrl !== track.url) {
-                console.log('Switching to fallback audio URL:', track.fallbackUrl);
-                audioElement.src = track.fallbackUrl;
-                audioElement.load();
-                audioElement.play().catch(err2 => console.error('Fallback audio playback error:', err2));
+        // Use Suno embed iframe for guaranteed cross-origin audio playback
+        const songId = getSunoSongId(track);
+        if (songId) {
+            setSunoEmbed(songId);
+        } else {
+            console.warn('Could not extract Suno song ID for track:', track);
+        }
+        // Start synthetic progress timer since iframe doesn't expose currentTime
+        if (progressTimer) clearInterval(progressTimer);
+        progressTimer = setInterval(() => {
+            if (isPlaying && tracks[currentTrackIndex].type === 'audio') {
+                trackCurrentSeconds += 0.25;
+                if (trackCurrentSeconds >= track.durationSec) {
+                    handleTrackEnd();
+                } else {
+                    updateProgressBar();
+                }
             }
-        });
+        }, 250);
     } else {
-        if (audioElement) audioElement.pause();
+        clearSunoEmbed();
         if (synthTimer) clearInterval(synthTimer);
         const intervalMs = track.style === 'chiptune' ? 100 : 150;
         synthTimer = setInterval(playSynthStep, intervalMs);
@@ -1052,6 +1062,7 @@ function startPlay() {
     renderTrackList();
 }
 
+
 function stopPlay() {
     isPlaying = false;
     updatePlayPauseIcons();
@@ -1059,7 +1070,9 @@ function stopPlay() {
     const inner = document.querySelector('.crystal-player-inner');
     if (inner) inner.classList.remove('playing');
 
-    if (audioElement) audioElement.pause();
+    // Clear the Suno embed to stop playback
+    clearSunoEmbed();
+    if (audioElement) { try { audioElement.pause(); } catch(_){} }
     if (synthTimer) { clearInterval(synthTimer); synthTimer = null; }
     if (progressTimer) { clearInterval(progressTimer); progressTimer = null; }
 
@@ -1069,9 +1082,6 @@ function stopPlay() {
 function stopTrack() {
     stopPlay();
     trackCurrentSeconds = 0;
-    if (tracks[currentTrackIndex].type === 'audio' && audioElement) {
-        audioElement.currentTime = 0;
-    }
     updateProgressBar();
 }
 
