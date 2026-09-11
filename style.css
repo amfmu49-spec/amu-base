@@ -1385,9 +1385,6 @@ iframe { display: block; }
     align-items: center; /* Center the text */
     min-width: 0;
     overflow: hidden;
-    /* Fade edges to make it appear/disappear smoothly in the center */
-    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
 
 .crystal-title {
@@ -1399,14 +1396,9 @@ iframe { display: block; }
         0 0 24px rgba(255, 255, 255, 0.7);
     letter-spacing: -0.01em;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     line-height: 1.2;
-    display: inline-block;
-    animation: marquee-center 8s linear infinite;
-}
-
-@keyframes marquee-center {
-    0% { transform: translateX(120%); }
-    100% { transform: translateX(-120%); }
 }
 
 .crystal-artist {
