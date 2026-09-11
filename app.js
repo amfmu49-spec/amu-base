@@ -637,12 +637,18 @@ function initAudioContext() {
         analyser.connect(audioCtx.destination);
 
         audioElement = new Audio();
-        try {
-            audioSourceNode = audioCtx.createMediaElementSource(audioElement);
-            audioSourceNode.connect(masterGain);
-        } catch (e) {
-            console.warn('Web Audio API routing unavailable', e);
-            audioSourceNode = null;
+        
+        // On mobile devices, routing through AudioContext breaks background playback.
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
+        if (!isMobile) {
+            try {
+                audioSourceNode = audioCtx.createMediaElementSource(audioElement);
+                audioSourceNode.connect(masterGain);
+            } catch (e) {
+                console.warn('Web Audio API routing unavailable', e);
+                audioSourceNode = null;
+            }
         }
 
         audioElement.addEventListener('timeupdate', () => {
@@ -863,6 +869,10 @@ function selectTrack(index, autoPlay = true) {
     if (index < 0 || index >= tracks.length) return;
     currentTrackIndex = index;
     const track = tracks[currentTrackIndex];
+
+    if (typeof updateMediaSession === 'function') {
+        updateMediaSession(track);
+    }
 
     trackCurrentSeconds = 0;
 
@@ -1291,3 +1301,22 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', observeReveal, { passive: true });
 });
 
+
+// ── Media Session API (Background Playback & Lock Screen Controls) ───────────
+function updateMediaSession(track) {
+    if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: track.title,
+            artist: track.artist || 'AMU',
+            album: 'AMU BASE MUSIC',
+            artwork: [
+                { src: 'https://amfmu49-spec.github.io/amu-base/icon-512x512.png', sizes: '512x512', type: 'image/png' }
+            ]
+        });
+
+        navigator.mediaSession.setActionHandler('play', () => startPlay());
+        navigator.mediaSession.setActionHandler('pause', () => stopPlay());
+        navigator.mediaSession.setActionHandler('previoustrack', () => playPrevTrack());
+        navigator.mediaSession.setActionHandler('nexttrack', () => playNextTrack());
+    }
+}
