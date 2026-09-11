@@ -885,7 +885,7 @@ function selectTrack(index, autoPlay = true) {
 
     if (titleEl) titleEl.textContent = track.title;
     if (artistEl) artistEl.textContent = track.artist || 'AiMu';
-    if (coverEl && track.cover) coverEl.src = track.cover;
+    if (coverEl) coverEl.src = track.cover || 'default_cover.jpg';
     if (totalTimeEl) totalTimeEl.textContent = track.durationStr;
     if (currTimeEl) currTimeEl.textContent = '0:00';
 
