@@ -1278,6 +1278,28 @@ function initMusicStation() {
     }, 200);
 }
 
+// ── Native App Deep Link Handler ──────────────────────────────────────────────
+function openXApp(e) {
+    const screenName = 'AiPainter969696';
+    const appUri = 'twitter://user?screen_name=' + screenName;
+    const webUrl = 'https://x.com/' + screenName;
+
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isMobile) {
+        if (e) e.preventDefault();
+        
+        const now = Date.now();
+        window.location.href = appUri;
+        
+        setTimeout(() => {
+            if (Date.now() - now < 2000) {
+                window.open(webUrl, '_blank');
+            }
+        }, 1200);
+    }
+}
+
 // ── Visitor Counter & Community Board ───────────────────────────────────────
 let selectedAvatar = '🚀';
 let currentBoardSort = 'newest';
