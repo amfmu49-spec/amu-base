@@ -20,6 +20,7 @@
         <li><a href="#media">MEDIA</a></li>
         <li><a href="#music">MUSIC</a></li>
         <li class="nav-item-apps"><a href="#apps">APPS</a></li>
+        <li><a href="#board">BOARD</a></li>
     </ul>
 </nav>
 
@@ -39,12 +40,12 @@
     </div>
     <div class="hero-counter">
         <div class="counter-group">
-            <span class="counter-label">TRACKS</span>
-            <span class="counter-num" id="counter-tracks">16</span>
+            <span class="counter-label">VISITORS</span>
+            <span class="counter-num" id="hero-visitors-num">1,248</span>
         </div>
         <div class="counter-group">
-            <span class="counter-label">APPS</span>
-            <span class="counter-num">8</span>
+            <span class="counter-label">TRACKS</span>
+            <span class="counter-num" id="counter-tracks">16</span>
         </div>
         <div class="counter-group">
             <span class="counter-label">PROJECTS</span>
@@ -320,6 +321,104 @@
 
         <!-- App Grid -->
         <div class="app-grid" id="app-grid"></div>
+    </div>
+</section>
+
+<!-- ===== COMMUNITY BOARD & VISITOR COUNTER SECTION ===== -->
+<section id="board" class="section">
+    <div class="section-inner">
+        <div class="section-label">04 — COMMUNITY BOARD</div>
+        
+        <div class="board-top-row">
+            <div class="board-title-group">
+                <h2 class="section-heading">Visitor Board &amp; Counter.</h2>
+                <p class="section-sub">AMU BASE への訪問記録と、感想・メッセージを自由に残せる掲示板です。</p>
+            </div>
+
+            <!-- Live Visitor Counter Widget Card -->
+            <div class="visitor-counter-card">
+                <div class="v-counter-header">
+                    <span class="v-live-badge"><span class="v-live-dot"></span> LIVE STATS</span>
+                    <span class="v-counter-tag">VISITOR COUNTER</span>
+                </div>
+                <div class="v-counter-stats-grid">
+                    <div class="v-stat-item">
+                        <span class="v-stat-val" id="v-total-views">1,248</span>
+                        <span class="v-stat-lbl">TOTAL VISITS</span>
+                    </div>
+                    <div class="v-stat-divider"></div>
+                    <div class="v-stat-item">
+                        <span class="v-stat-val" id="v-today-views">42</span>
+                        <span class="v-stat-lbl">TODAY</span>
+                    </div>
+                    <div class="v-stat-divider"></div>
+                    <div class="v-stat-item">
+                        <span class="v-stat-val" id="v-board-posts">3</span>
+                        <span class="v-stat-lbl">POSTS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Board Grid: Left = Post Form, Right = Posts Stream -->
+        <div class="board-grid">
+            <!-- Left: Form -->
+            <div class="board-form-card">
+                <h3 class="board-card-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    メッセージを投稿する
+                </h3>
+                <form id="board-form" onsubmit="handleBoardSubmit(event)">
+                    <div class="board-form-group">
+                        <label for="board-name">お名前 / ニックネーム</label>
+                        <input type="text" id="board-name" placeholder="例: 匿名クリエイター" maxlength="20">
+                    </div>
+
+                    <div class="board-form-group">
+                        <label>アバターアイコン</label>
+                        <div class="avatar-picker" id="avatar-picker">
+                            <button type="button" class="avatar-opt active" data-avatar="🚀">🚀</button>
+                            <button type="button" class="avatar-opt" data-avatar="🎧">🎧</button>
+                            <button type="button" class="avatar-opt" data-avatar="👾">👾</button>
+                            <button type="button" class="avatar-opt" data-avatar="🔥">🔥</button>
+                            <button type="button" class="avatar-opt" data-avatar="🐱">🐱</button>
+                            <button type="button" class="avatar-opt" data-avatar="⚡">⚡</button>
+                            <button type="button" class="avatar-opt" data-avatar="🎨">🎨</button>
+                            <button type="button" class="avatar-opt" data-avatar="🎹">🎹</button>
+                        </div>
+                    </div>
+
+                    <div class="board-form-group">
+                        <label for="board-msg">メッセージ （感想・応援・質問など）</label>
+                        <textarea id="board-msg" rows="3" placeholder="AMU BASE や作品への感想、メッセージを書いてね！" required maxlength="200"></textarea>
+                        <div class="board-char-count"><span id="board-char-num">0</span> / 200</div>
+                    </div>
+
+                    <button type="submit" class="cyber-btn board-submit-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        <span>投稿する</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right: Posts List -->
+            <div class="board-posts-card">
+                <div class="board-posts-header">
+                    <h3 class="board-card-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        みんなのメッセージ
+                    </h3>
+                    <div class="board-sort-btns">
+                        <button type="button" class="sort-btn active" id="sort-newest" onclick="setBoardSort('newest')">新着順</button>
+                        <button type="button" class="sort-btn" id="sort-popular" onclick="setBoardSort('popular')">人気順</button>
+                    </div>
+                </div>
+
+                <div id="board-posts-list" class="board-posts-list">
+                    <!-- Dynamic rendering via JS -->
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 

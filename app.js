@@ -1278,6 +1278,301 @@ function initMusicStation() {
     }, 200);
 }
 
+// ── Visitor Counter & Community Board ───────────────────────────────────────
+let selectedAvatar = '🚀';
+let currentBoardSort = 'newest';
+
+function animateNumberValue(element, start, end, duration = 1200) {
+    if (!element) return;
+    const startTime = performance.now();
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeProgress = 1 - (1 - progress) * (1 - progress);
+        const currentVal = Math.floor(start + (end - start) * easeProgress);
+        element.textContent = currentVal.toLocaleString();
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        } else {
+            element.textContent = end.toLocaleString();
+        }
+    }
+    requestAnimationFrame(update);
+}
+
+function initVisitorCounter() {
+    const BASE_TOTAL = 1248;
+    const BASE_TODAY = 42;
+    const todayStr = new Date().toISOString().split('T')[0];
+
+    let totalVisits = BASE_TOTAL;
+    let todayVisits = BASE_TODAY;
+    let lastDate = '';
+
+    try {
+        const savedTotal = localStorage.getItem('amu_base_total_visits');
+        const savedToday = localStorage.getItem('amu_base_today_visits');
+        lastDate = localStorage.getItem('amu_base_last_visit_date') || '';
+
+        if (savedTotal) totalVisits = Math.max(BASE_TOTAL, parseInt(savedTotal, 10));
+        if (savedToday) todayVisits = parseInt(savedToday, 10);
+    } catch (_) {}
+
+    if (lastDate !== todayStr) {
+        todayVisits = BASE_TODAY + 1;
+        totalVisits += 1;
+    } else {
+        todayVisits += 1;
+        totalVisits += 1;
+    }
+
+    try {
+        localStorage.setItem('amu_base_total_visits', totalVisits.toString());
+        localStorage.setItem('amu_base_today_visits', todayVisits.toString());
+        localStorage.setItem('amu_base_last_visit_date', todayStr);
+    } catch (_) {}
+
+    const totalEl = document.getElementById('v-total-views');
+    const todayEl = document.getElementById('v-today-views');
+    const heroEl = document.getElementById('hero-visitors-num');
+
+    if (totalEl) animateNumberValue(totalEl, Math.max(0, totalVisits - 50), totalVisits);
+    if (todayEl) animateNumberValue(todayEl, Math.max(0, todayVisits - 10), todayVisits);
+    if (heroEl) animateNumberValue(heroEl, Math.max(0, totalVisits - 50), totalVisits);
+}
+
+function getStoredPosts() {
+    const defaultPosts = [
+        {
+            id: 'seed-1',
+            name: 'AiMu (司令官)',
+            avatar: '🚀',
+            text: 'AMU BASEへようこそ！音楽やWebアプリ、クリエイティブ作品の実験場です。感想や応援メッセージ、質問などお気軽に残していってください！',
+            time: '2026/09/16 12:00',
+            likes: 18,
+            isOwner: true
+        },
+        {
+            id: 'seed-2',
+            name: 'リスナーA',
+            avatar: '🎧',
+            text: '「Air...」最高でした！プレイヤーのデザインも美しくて作業用BGMとして重宝してます。応援してます！',
+            time: '2026/09/16 14:30',
+            likes: 8,
+            isOwner: false
+        },
+        {
+            id: 'seed-3',
+            name: 'ゲストゲーマー',
+            avatar: '👾',
+            text: 'フリースローゲーム面白い！音とタイミングがクセになります。スコア更新頑張ります！',
+            time: '2026/09/16 16:15',
+            likes: 5,
+            isOwner: false
+        }
+    ];
+
+    try {
+        const raw = localStorage.getItem('amu_base_board_posts');
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                return parsed;
+            }
+        }
+    } catch (_) {}
+
+    return defaultPosts;
+}
+
+function savePosts(posts) {
+    try {
+        localStorage.setItem('amu_base_board_posts', JSON.stringify(posts));
+    } catch (_) {}
+}
+
+function getLikedPostIds() {
+    try {
+        const raw = localStorage.getItem('amu_base_liked_posts');
+        return raw ? JSON.parse(raw) : [];
+    } catch (_) {
+        return [];
+    }
+}
+
+function saveLikedPostIds(likedArray) {
+    try {
+        localStorage.setItem('amu_base_liked_posts', JSON.stringify(likedArray));
+    } catch (_) {}
+}
+
+function initBoard() {
+    const avatarContainer = document.getElementById('avatar-picker');
+    if (avatarContainer) {
+        avatarContainer.addEventListener('click', (e) => {
+            const btn = e.target.closest('.avatar-opt');
+            if (!btn) return;
+            avatarContainer.querySelectorAll('.avatar-opt').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedAvatar = btn.getAttribute('data-avatar') || '🚀';
+        });
+    }
+
+    const msgInput = document.getElementById('board-msg');
+    const charNum = document.getElementById('board-char-num');
+    if (msgInput && charNum) {
+        msgInput.addEventListener('input', () => {
+            charNum.textContent = msgInput.value.length;
+        });
+    }
+
+    renderBoardPosts();
+}
+
+function renderBoardPosts() {
+    const listContainer = document.getElementById('board-posts-list');
+    const postsCountEl = document.getElementById('v-board-posts');
+    if (!listContainer) return;
+
+    let posts = getStoredPosts();
+    if (postsCountEl) {
+        postsCountEl.textContent = posts.length;
+    }
+
+    if (currentBoardSort === 'popular') {
+        posts.sort((a, b) => b.likes - a.likes);
+    } else {
+        posts.sort((a, b) => new Date(b.time.replace(/\//g, '-')).getTime() - new Date(a.time.replace(/\//g, '-')).getTime());
+    }
+
+    const likedSet = new Set(getLikedPostIds());
+
+    listContainer.innerHTML = posts.map(post => {
+        const isLiked = likedSet.has(post.id);
+        const ownerClass = post.isOwner ? 'owner-post' : '';
+        const ownerBadge = post.isOwner ? '<span class="post-owner-badge">COMMANDER</span>' : '';
+        const deleteBtn = (post.canDelete || !post.id.startsWith('seed-'))
+            ? `<button type="button" class="post-delete-btn" onclick="deleteBoardPost('${post.id}')" title="削除">削除</button>`
+            : '';
+
+        return `
+            <div class="board-post-card ${ownerClass}">
+                <div class="post-card-header">
+                    <div class="post-user-info">
+                        <div class="post-avatar-icon">${escapeHtml(post.avatar || '🚀')}</div>
+                        <div class="post-author-name">
+                            <span>${escapeHtml(post.name || '匿名クリエイター')}</span>
+                            ${ownerBadge}
+                        </div>
+                    </div>
+                    <span class="post-time-stamp">${escapeHtml(post.time)}</span>
+                </div>
+                <div class="post-body-text">${escapeHtml(post.text)}</div>
+                <div class="post-card-actions">
+                    <button type="button" class="post-like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLikeBoardPost('${post.id}')">
+                        <span>${isLiked ? '❤️' : '🤍'}</span>
+                        <span>${post.likes || 0}</span>
+                    </button>
+                    ${deleteBtn}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function handleBoardSubmit(e) {
+    e.preventDefault();
+    const nameInput = document.getElementById('board-name');
+    const msgInput = document.getElementById('board-msg');
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+
+    if (!msgInput || !msgInput.value.trim()) return;
+
+    const name = nameInput && nameInput.value.trim() ? nameInput.value.trim() : '匿名クリエイター';
+    const text = msgInput.value.trim();
+
+    const now = new Date();
+    const formattedTime = `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+    const newPost = {
+        id: 'post-' + Date.now(),
+        name: name,
+        avatar: selectedAvatar,
+        text: text,
+        time: formattedTime,
+        likes: 0,
+        isOwner: false,
+        canDelete: true
+    };
+
+    const posts = getStoredPosts();
+    posts.unshift(newPost);
+    savePosts(posts);
+
+    msgInput.value = '';
+    const charNum = document.getElementById('board-char-num');
+    if (charNum) charNum.textContent = '0';
+
+    if (submitBtn) {
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<span>✅ 投稿しました！</span>';
+        submitBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        setTimeout(() => {
+            submitBtn.innerHTML = originalText;
+            submitBtn.style.background = '';
+        }, 2000);
+    }
+
+    renderBoardPosts();
+}
+
+function toggleLikeBoardPost(postId) {
+    const posts = getStoredPosts();
+    let likedArray = getLikedPostIds();
+    const index = likedArray.indexOf(postId);
+
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+
+    if (index >= 0) {
+        likedArray.splice(index, 1);
+        post.likes = Math.max(0, (post.likes || 1) - 1);
+    } else {
+        likedArray.push(postId);
+        post.likes = (post.likes || 0) + 1;
+    }
+
+    saveLikedPostIds(likedArray);
+    savePosts(posts);
+    renderBoardPosts();
+}
+
+function deleteBoardPost(postId) {
+    if (!confirm('この投稿を削除しますか？')) return;
+    let posts = getStoredPosts();
+    posts = posts.filter(p => p.id !== postId);
+    savePosts(posts);
+    renderBoardPosts();
+}
+
+function setBoardSort(sortType) {
+    currentBoardSort = sortType;
+    document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
+    const targetBtn = document.getElementById(sortType === 'popular' ? 'sort-popular' : 'sort-newest');
+    if (targetBtn) targetBtn.classList.add('active');
+    renderBoardPosts();
+}
+
 // ── INIT ──────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
     initNebula();
@@ -1288,6 +1583,8 @@ document.addEventListener('DOMContentLoaded', () => {
     renderApps(apps);
     initAppFilters();
     initModal();
+    initVisitorCounter();
+    initBoard();
 
     // Add reveal class to static sections
     document.querySelectorAll('.section-label, .section-heading, .section-sub, .profile-bio, .profile-tags, .profile-socials').forEach(el => {
