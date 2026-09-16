@@ -1301,12 +1301,10 @@ function animateNumberValue(element, start, end, duration = 1200) {
 }
 
 function initVisitorCounter() {
-    const BASE_TOTAL = 1248;
-    const BASE_TODAY = 42;
     const todayStr = new Date().toISOString().split('T')[0];
 
-    let totalVisits = BASE_TOTAL;
-    let todayVisits = BASE_TODAY;
+    let totalVisits = 0;
+    let todayVisits = 0;
     let lastDate = '';
 
     try {
@@ -1314,16 +1312,22 @@ function initVisitorCounter() {
         const savedToday = localStorage.getItem('amu_base_today_visits');
         lastDate = localStorage.getItem('amu_base_last_visit_date') || '';
 
-        if (savedTotal) totalVisits = Math.max(BASE_TOTAL, parseInt(savedTotal, 10));
-        if (savedToday) todayVisits = parseInt(savedToday, 10);
+        if (savedTotal) {
+            totalVisits = parseInt(savedTotal, 10);
+            if (isNaN(totalVisits) || totalVisits >= 1000) totalVisits = 0;
+        }
+        if (savedToday) {
+            todayVisits = parseInt(savedToday, 10);
+            if (isNaN(todayVisits) || todayVisits >= 30) todayVisits = 0;
+        }
     } catch (_) {}
 
     if (lastDate !== todayStr) {
-        todayVisits = BASE_TODAY + 1;
+        todayVisits = 1;
         totalVisits += 1;
     } else {
-        todayVisits += 1;
-        totalVisits += 1;
+        todayVisits = (todayVisits <= 0) ? 1 : todayVisits + 1;
+        totalVisits = (totalVisits <= 0) ? 1 : totalVisits + 1;
     }
 
     try {
@@ -1336,53 +1340,23 @@ function initVisitorCounter() {
     const todayEl = document.getElementById('v-today-views');
     const heroEl = document.getElementById('hero-visitors-num');
 
-    if (totalEl) animateNumberValue(totalEl, Math.max(0, totalVisits - 50), totalVisits);
-    if (todayEl) animateNumberValue(todayEl, Math.max(0, todayVisits - 10), todayVisits);
-    if (heroEl) animateNumberValue(heroEl, Math.max(0, totalVisits - 50), totalVisits);
+    if (totalEl) totalEl.textContent = totalVisits.toLocaleString();
+    if (todayEl) todayEl.textContent = todayVisits.toLocaleString();
+    if (heroEl) heroEl.textContent = totalVisits.toLocaleString();
 }
 
 function getStoredPosts() {
-    const defaultPosts = [
-        {
-            id: 'seed-1',
-            name: 'AiMu (司令官)',
-            avatar: '🚀',
-            text: 'AMU BASEへようこそ！音楽やWebアプリ、クリエイティブ作品の実験場です。感想や応援メッセージ、質問などお気軽に残していってください！',
-            time: '2026/09/16 12:00',
-            likes: 18,
-            isOwner: true
-        },
-        {
-            id: 'seed-2',
-            name: 'リスナーA',
-            avatar: '🎧',
-            text: '「Air...」最高でした！プレイヤーのデザインも美しくて作業用BGMとして重宝してます。応援してます！',
-            time: '2026/09/16 14:30',
-            likes: 8,
-            isOwner: false
-        },
-        {
-            id: 'seed-3',
-            name: 'ゲストゲーマー',
-            avatar: '👾',
-            text: 'フリースローゲーム面白い！音とタイミングがクセになります。スコア更新頑張ります！',
-            time: '2026/09/16 16:15',
-            likes: 5,
-            isOwner: false
-        }
-    ];
-
     try {
         const raw = localStorage.getItem('amu_base_board_posts');
         if (raw) {
             const parsed = JSON.parse(raw);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-                return parsed;
+            if (Array.isArray(parsed)) {
+                return parsed.filter(p => p && p.id && !p.id.startsWith('seed-'));
             }
         }
     } catch (_) {}
 
-    return defaultPosts;
+    return [];
 }
 
 function savePosts(posts) {
@@ -1437,6 +1411,11 @@ function renderBoardPosts() {
     let posts = getStoredPosts();
     if (postsCountEl) {
         postsCountEl.textContent = posts.length;
+    }
+
+    if (posts.length === 0) {
+        listContainer.innerHTML = '<div class="board-empty-msg" style="text-align:center; padding: 48px 20px; color: var(--muted); font-size: 0.9rem; line-height: 1.8;">💬 まだメッセージはありません。<br>最初の感想・メッセージを投稿してみよう！</div>';
+        return;
     }
 
     if (currentBoardSort === 'popular') {

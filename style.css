@@ -1866,7 +1866,30 @@ iframe { display: block; }
 }
 
 /* ============================================================
-   COMMUNITY BOARD & VISITOR COUNTER SECTION
+   VISITOR COUNTER STRIP (ABOVE PROFILE)
+   ============================================================ */
+.counter-strip-section {
+    padding: 36px clamp(20px, 4vw, 60px) 20px;
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.counter-strip-inner {
+    max-width: var(--max-w);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.counter-strip-inner .visitor-counter-card {
+    width: 100%;
+    max-width: 640px;
+}
+
+/* ============================================================
+   COMMUNITY BOARD SECTION
    ============================================================ */
 #board {
     background: #f8fafc;
