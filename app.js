@@ -481,6 +481,19 @@ let tracks = [
         type: 'audio',
         url: 'audio/雨ニモマケズ.mp3',
         desc: ''
+    },
+    {
+        id: 'local-9',
+        title: 'Sweet Venom',
+        artist: 'AMU',
+        tag: 'Original',
+        icon: '🎧',
+        cover: '',
+        durationStr: '--:--',
+        durationSec: 180,
+        type: 'audio',
+        url: 'audio/Sweet Venom.mp3',
+        desc: ''
     }
 ];
 
