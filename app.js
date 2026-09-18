@@ -1316,6 +1316,40 @@ function openXApp(e) {
 // ── Visitor Counter & Shared Online Board ─────────────────────────────────────
 let selectedAvatar = '🚀';
 let currentBoardSort = 'newest';
+let cloudPostsCache = [];
+
+// Firebase Realtime DB Setup
+const firebaseConfig = {
+    databaseURL: "https://amu-base-official-rtdb.firebaseio.com"
+};
+
+let firebaseDb = null;
+
+function initCloudDatabase() {
+    if (typeof firebase !== 'undefined') {
+        try {
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            firebaseDb = firebase.database();
+            
+            // Listen for live posts from visitors worldwide
+            firebaseDb.ref('posts').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    const list = Object.values(data).filter(p => p && p.id);
+                    cloudPostsCache = list;
+                    savePosts(list);
+                    renderBoardPosts();
+                }
+            }, (error) => {
+                console.warn('Firebase RTDB listener error, using local/REST fallback:', error);
+            });
+        } catch (e) {
+            console.warn('Firebase DB init fallback:', e);
+        }
+    }
+}
 
 async function initVisitorCounter() {
     const totalEl = document.getElementById('v-total-views');
@@ -1342,6 +1376,9 @@ async function initVisitorCounter() {
 }
 
 function getStoredPosts() {
+    if (cloudPostsCache && cloudPostsCache.length > 0) {
+        return [...cloudPostsCache];
+    }
     try {
         const raw = localStorage.getItem('amu_base_board_posts');
         if (raw) {
@@ -1377,6 +1414,8 @@ function saveLikedPostIds(likedArray) {
 }
 
 function initBoard() {
+    initCloudDatabase();
+
     const avatarContainer = document.getElementById('avatar-picker');
     if (avatarContainer) {
         avatarContainer.addEventListener('click', (e) => {
@@ -1480,7 +1519,7 @@ function handleBoardSubmit(e) {
     const formattedTime = `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
     const newPost = {
-        id: 'post-' + Date.now(),
+        id: 'post-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
         name: name,
         avatar: selectedAvatar,
         text: text,
@@ -1490,9 +1529,20 @@ function handleBoardSubmit(e) {
         canDelete: true
     };
 
+    // Save locally
     const posts = getStoredPosts();
     posts.unshift(newPost);
+    cloudPostsCache = posts;
     savePosts(posts);
+
+    // Sync to Cloud DB (Firebase)
+    if (firebaseDb) {
+        try {
+            firebaseDb.ref('posts/' + newPost.id).set(newPost);
+        } catch (err) {
+            console.warn('Firebase set post error:', err);
+        }
+    }
 
     msgInput.value = '';
     const charNum = document.getElementById('board-char-num');
@@ -1529,6 +1579,16 @@ function toggleLikeBoardPost(postId) {
 
     saveLikedPostIds(likedArray);
     savePosts(posts);
+
+    // Sync likes to Cloud DB
+    if (firebaseDb) {
+        try {
+            firebaseDb.ref('posts/' + postId + '/likes').set(post.likes);
+        } catch (err) {
+            console.warn('Firebase like sync error:', err);
+        }
+    }
+
     renderBoardPosts();
 }
 
@@ -1536,7 +1596,18 @@ function deleteBoardPost(postId) {
     if (!confirm('この投稿を削除しますか？')) return;
     let posts = getStoredPosts();
     posts = posts.filter(p => p.id !== postId);
+    cloudPostsCache = posts;
     savePosts(posts);
+
+    // Remove from Cloud DB
+    if (firebaseDb) {
+        try {
+            firebaseDb.ref('posts/' + postId).remove();
+        } catch (err) {
+            console.warn('Firebase delete post error:', err);
+        }
+    }
+
     renderBoardPosts();
 }
 
