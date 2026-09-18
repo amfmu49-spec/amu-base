@@ -2516,6 +2516,31 @@ iframe { display: block; }
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
+.board-refresh-btn {
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(120, 160, 240, 0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.board-refresh-btn:hover {
+    background: #ffffff;
+    color: var(--accent);
+}
+
+.board-refresh-btn.rotating {
+    opacity: 0.7;
+    pointer-events: none;
+    animation: spinRefresh 0.6s linear infinite;
+}
+
+@keyframes spinRefresh {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
 .board-posts-list {
     display: flex;
     flex-direction: column;

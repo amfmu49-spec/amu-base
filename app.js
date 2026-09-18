@@ -1078,7 +1078,6 @@ const FIREBASE_DB_URL = 'https://amu-base-board-default-rtdb.firebaseio.com';
 // ── Track Likes & Sort (Global via Firebase REST API) ────────────────────────
 let currentTrackSort = 'newest'; // 'newest' | 'liked'
 let globalTrackLikeCounts = {}; // { trackId: number } — fetched from Firebase
-let trackLikesPollingInterval = null;
 
 // My own likes stored locally (to prevent double-liking)
 function getMyTrackLikes() {
@@ -1392,11 +1391,8 @@ function initMusicStation() {
         applySunoPlaylist(true);
     }, 200);
 
-    // Fetch global track likes from Firebase and poll periodically
+    // Fetch global track likes from Firebase on page load
     fetchTrackLikesFromCloud();
-    if (!trackLikesPollingInterval) {
-        trackLikesPollingInterval = setInterval(fetchTrackLikesFromCloud, 15000);
-    }
 }
 
 // ── Native App Deep Link Handler ──────────────────────────────────────────────
@@ -1425,7 +1421,6 @@ function openXApp(e) {
 let selectedAvatar = '🚀';
 let currentBoardSort = 'newest';
 let cloudPostsCache = [];
-let cloudPollingInterval = null;
 
 // Fetch all posts from Firebase REST API
 async function fetchCloudPosts() {
@@ -1563,11 +1558,8 @@ function initBoard() {
         });
     }
 
-    // Load cloud posts immediately
+    // Load cloud posts on page load
     fetchCloudPosts();
-
-    // Poll for new posts every 10 seconds (simulates real-time)
-    cloudPollingInterval = setInterval(fetchCloudPosts, 10000);
 
     renderBoardPosts();
 }
@@ -1723,10 +1715,24 @@ async function deleteBoardPost(postId) {
 
 function setBoardSort(sortType) {
     currentBoardSort = sortType;
-    document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.sort-btn:not(#board-refresh-btn)').forEach(btn => btn.classList.remove('active'));
     const targetBtn = document.getElementById(sortType === 'popular' ? 'sort-popular' : 'sort-newest');
     if (targetBtn) targetBtn.classList.add('active');
     renderBoardPosts();
+}
+
+async function refreshBoardPosts(btn) {
+    if (btn) {
+        btn.classList.add('rotating');
+        btn.disabled = true;
+    }
+    await fetchCloudPosts();
+    if (btn) {
+        setTimeout(() => {
+            btn.classList.remove('rotating');
+            btn.disabled = false;
+        }, 500);
+    }
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
