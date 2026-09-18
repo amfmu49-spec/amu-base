@@ -1313,41 +1313,67 @@ function openXApp(e) {
     }
 }
 
-// ── Visitor Counter & Shared Online Board ─────────────────────────────────────
+// ── Firebase REST API Board (Global Real-time Sharing) ────────────────────────
+const FIREBASE_DB_URL = 'https://amu-base-board-default-rtdb.firebaseio.com';
 let selectedAvatar = '🚀';
 let currentBoardSort = 'newest';
 let cloudPostsCache = [];
+let cloudPollingInterval = null;
 
-// Firebase Realtime DB Setup
-const firebaseConfig = {
-    databaseURL: "https://amu-base-official-rtdb.firebaseio.com"
-};
-
-let firebaseDb = null;
-
-function initCloudDatabase() {
-    if (typeof firebase !== 'undefined') {
-        try {
-            if (!firebase.apps.length) {
-                firebase.initializeApp(firebaseConfig);
+// Fetch all posts from Firebase REST API
+async function fetchCloudPosts() {
+    try {
+        const res = await fetch(FIREBASE_DB_URL + '/posts.json');
+        if (res.ok) {
+            const data = await res.json();
+            if (data && typeof data === 'object') {
+                const list = Object.values(data).filter(p => p && p.id);
+                cloudPostsCache = list;
+                savePosts(list);
+                renderBoardPosts();
             }
-            firebaseDb = firebase.database();
-            
-            // Listen for live posts from visitors worldwide
-            firebaseDb.ref('posts').on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    const list = Object.values(data).filter(p => p && p.id);
-                    cloudPostsCache = list;
-                    savePosts(list);
-                    renderBoardPosts();
-                }
-            }, (error) => {
-                console.warn('Firebase RTDB listener error, using local/REST fallback:', error);
-            });
-        } catch (e) {
-            console.warn('Firebase DB init fallback:', e);
         }
+    } catch (e) {
+        console.warn('Firebase fetch error:', e);
+    }
+}
+
+// Save a single post to Firebase REST API
+async function savePostToCloud(post) {
+    try {
+        await fetch(FIREBASE_DB_URL + '/posts/' + post.id + '.json', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(post)
+        });
+    } catch (e) {
+        console.warn('Firebase save error:', e);
+    }
+}
+
+// Delete a single post from Firebase REST API
+async function deletePostFromCloud(postId) {
+    try {
+        await fetch(FIREBASE_DB_URL + '/posts/' + postId + '.json', {
+            method: 'DELETE'
+        });
+    } catch (e) {
+        console.warn('Firebase delete error:', e);
+    }
+}
+
+// Update a single field in Firebase REST API
+async function updatePostField(postId, field, value) {
+    try {
+        const body = {};
+        body[field] = value;
+        await fetch(FIREBASE_DB_URL + '/posts/' + postId + '.json', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+    } catch (e) {
+        console.warn('Firebase update error:', e);
     }
 }
 
@@ -1388,7 +1414,6 @@ function getStoredPosts() {
             }
         }
     } catch (_) {}
-
     return [];
 }
 
@@ -1402,9 +1427,7 @@ function getLikedPostIds() {
     try {
         const raw = localStorage.getItem('amu_base_liked_posts');
         return raw ? JSON.parse(raw) : [];
-    } catch (_) {
-        return [];
-    }
+    } catch (_) { return []; }
 }
 
 function saveLikedPostIds(likedArray) {
@@ -1414,8 +1437,6 @@ function saveLikedPostIds(likedArray) {
 }
 
 function initBoard() {
-    initCloudDatabase();
-
     const avatarContainer = document.getElementById('avatar-picker');
     if (avatarContainer) {
         avatarContainer.addEventListener('click', (e) => {
@@ -1435,6 +1456,12 @@ function initBoard() {
         });
     }
 
+    // Load cloud posts immediately
+    fetchCloudPosts();
+
+    // Poll for new posts every 10 seconds (simulates real-time)
+    cloudPollingInterval = setInterval(fetchCloudPosts, 10000);
+
     renderBoardPosts();
 }
 
@@ -1444,9 +1471,7 @@ function renderBoardPosts() {
     if (!listContainer) return;
 
     let posts = getStoredPosts();
-    if (postsCountEl) {
-        postsCountEl.textContent = posts.length;
-    }
+    if (postsCountEl) postsCountEl.textContent = posts.length;
 
     if (posts.length === 0) {
         listContainer.innerHTML = '<div class="board-empty-msg" style="text-align:center; padding: 48px 20px; color: var(--muted); font-size: 0.9rem; line-height: 1.8;">💬 まだメッセージはありません。<br>最初の感想・メッセージを投稿してみよう！</div>';
@@ -1465,9 +1490,7 @@ function renderBoardPosts() {
         const isLiked = likedSet.has(post.id);
         const ownerClass = post.isOwner ? 'owner-post' : '';
         const ownerBadge = post.isOwner ? '<span class="post-owner-badge">COMMANDER</span>' : '';
-        const deleteBtn = (post.canDelete || !post.id.startsWith('seed-'))
-            ? `<button type="button" class="post-delete-btn" onclick="deleteBoardPost('${post.id}')" title="削除">削除</button>`
-            : '';
+        const deleteBtn = `<button type="button" class="post-delete-btn" onclick="deleteBoardPost('${post.id}')" title="削除">削除</button>`;
 
         return `
             <div class="board-post-card ${ownerClass}">
@@ -1504,7 +1527,7 @@ function escapeHtml(str) {
         .replace(/'/g, '&#039;');
 }
 
-function handleBoardSubmit(e) {
+async function handleBoardSubmit(e) {
     e.preventDefault();
     const nameInput = document.getElementById('board-name');
     const msgInput = document.getElementById('board-msg');
@@ -1519,7 +1542,7 @@ function handleBoardSubmit(e) {
     const formattedTime = `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
     const newPost = {
-        id: 'post-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+        id: 'post-' + Date.now() + '-' + Math.floor(Math.random() * 9999),
         name: name,
         avatar: selectedAvatar,
         text: text,
@@ -1529,20 +1552,15 @@ function handleBoardSubmit(e) {
         canDelete: true
     };
 
-    // Save locally
+    // Show optimistic update locally
     const posts = getStoredPosts();
     posts.unshift(newPost);
     cloudPostsCache = posts;
     savePosts(posts);
+    renderBoardPosts();
 
-    // Sync to Cloud DB (Firebase)
-    if (firebaseDb) {
-        try {
-            firebaseDb.ref('posts/' + newPost.id).set(newPost);
-        } catch (err) {
-            console.warn('Firebase set post error:', err);
-        }
-    }
+    // Save to Firebase cloud (globally shared)
+    await savePostToCloud(newPost);
 
     msgInput.value = '';
     const charNum = document.getElementById('board-char-num');
@@ -1557,11 +1575,9 @@ function handleBoardSubmit(e) {
             submitBtn.style.background = '';
         }, 2000);
     }
-
-    renderBoardPosts();
 }
 
-function toggleLikeBoardPost(postId) {
+async function toggleLikeBoardPost(postId) {
     const posts = getStoredPosts();
     let likedArray = getLikedPostIds();
     const index = likedArray.indexOf(postId);
@@ -1578,37 +1594,24 @@ function toggleLikeBoardPost(postId) {
     }
 
     saveLikedPostIds(likedArray);
+    cloudPostsCache = posts;
     savePosts(posts);
-
-    // Sync likes to Cloud DB
-    if (firebaseDb) {
-        try {
-            firebaseDb.ref('posts/' + postId + '/likes').set(post.likes);
-        } catch (err) {
-            console.warn('Firebase like sync error:', err);
-        }
-    }
-
     renderBoardPosts();
+
+    // Sync likes to Firebase cloud
+    await updatePostField(postId, 'likes', post.likes);
 }
 
-function deleteBoardPost(postId) {
+async function deleteBoardPost(postId) {
     if (!confirm('この投稿を削除しますか？')) return;
     let posts = getStoredPosts();
     posts = posts.filter(p => p.id !== postId);
     cloudPostsCache = posts;
     savePosts(posts);
-
-    // Remove from Cloud DB
-    if (firebaseDb) {
-        try {
-            firebaseDb.ref('posts/' + postId).remove();
-        } catch (err) {
-            console.warn('Firebase delete post error:', err);
-        }
-    }
-
     renderBoardPosts();
+
+    // Remove from Firebase cloud
+    await deletePostFromCloud(postId);
 }
 
 function setBoardSort(sortType) {
