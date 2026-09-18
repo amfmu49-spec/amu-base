@@ -425,7 +425,10 @@
             <div class="crystal-playlist-card">
                 <div class="playlist-header">
                     <div class="playlist-title">TRACK LIST (<span id="track-count">0</span>)</div>
-                    <span class="playlist-hint">クリックで即時再生</span>
+                    <div class="track-sort-btns">
+                        <button type="button" class="track-sort-btn active" id="tsort-newest" onclick="setTrackSort('newest')">新着順</button>
+                        <button type="button" class="track-sort-btn" id="tsort-liked" onclick="setTrackSort('liked')">♡ いいね順</button>
+                    </div>
                 </div>
 
                 <!-- Track list -->

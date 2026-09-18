@@ -1071,6 +1071,42 @@ function seekTo(fraction) {
     updateProgressBar();
 }
 
+// ── Track Likes & Sort ───────────────────────────────────────────────────────
+let currentTrackSort = 'newest'; // 'newest' | 'liked'
+
+function getTrackLikes() {
+    try {
+        const raw = localStorage.getItem('amu_track_likes');
+        return raw ? JSON.parse(raw) : {};
+    } catch (_) { return {}; }
+}
+
+function saveTrackLikes(likesObj) {
+    try {
+        localStorage.setItem('amu_track_likes', JSON.stringify(likesObj));
+    } catch (_) {}
+}
+
+function toggleTrackLike(e, trackId) {
+    e.stopPropagation(); // don't trigger track selection
+    const likes = getTrackLikes();
+    if (likes[trackId]) {
+        delete likes[trackId];
+    } else {
+        likes[trackId] = true;
+    }
+    saveTrackLikes(likes);
+    renderTrackList();
+}
+
+function setTrackSort(sortType) {
+    currentTrackSort = sortType;
+    document.querySelectorAll('.track-sort-btn').forEach(b => b.classList.remove('active'));
+    const targetBtn = document.getElementById(sortType === 'liked' ? 'tsort-liked' : 'tsort-newest');
+    if (targetBtn) targetBtn.classList.add('active');
+    renderTrackList();
+}
+
 // ── Track List Rendering ─────────────────────────────────────────────────────
 function renderTrackList() {
     const listEl = document.getElementById('track-list');
@@ -1081,8 +1117,23 @@ function renderTrackList() {
     if (countEl) countEl.textContent = tracks.length;
     if (counterTracksEl) counterTracksEl.textContent = tracks.length;
 
-    listEl.innerHTML = tracks.map((track, idx) => {
+    const likes = getTrackLikes();
+
+    // Build sorted index list
+    let sortedIndices = tracks.map((_, idx) => idx);
+    if (currentTrackSort === 'liked') {
+        // Liked tracks first, then rest
+        sortedIndices.sort((a, b) => {
+            const likedA = likes[tracks[a].id] ? 1 : 0;
+            const likedB = likes[tracks[b].id] ? 1 : 0;
+            return likedB - likedA;
+        });
+    }
+
+    listEl.innerHTML = sortedIndices.map((idx) => {
+        const track = tracks[idx];
         const isActive = idx === currentTrackIndex;
+        const isLiked = !!likes[track.id];
         return `
             <div class="track-item ${isActive ? 'active' : ''}" onclick="selectTrack(${idx}, true)">
                 <span class="track-item-idx">${(idx + 1).toString().padStart(2, '0')}</span>
@@ -1098,6 +1149,11 @@ function renderTrackList() {
                     </div>
                 </div>
                 <span class="track-item-duration">${track.durationStr}</span>
+                <button type="button" class="track-like-btn ${isLiked ? 'liked' : ''}"
+                    onclick="toggleTrackLike(event, '${track.id}')"
+                    title="${isLiked ? 'いいね解除' : 'いいね'}">
+                    ${isLiked ? '❤️' : '🤍'}
+                </button>
             </div>
         `;
     }).join('');
