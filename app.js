@@ -592,6 +592,7 @@ async function applySunoPlaylist(isSilent = false) {
 
                 tracks = newTracks;
                 renderTrackList();
+                fetchTrackLikesFromCloud();
 
                 // If not playing, refresh current track info to first item
                 if (!isPlaying) {
@@ -1071,32 +1072,76 @@ function seekTo(fraction) {
     updateProgressBar();
 }
 
-// ── Track Likes & Sort ───────────────────────────────────────────────────────
-let currentTrackSort = 'newest'; // 'newest' | 'liked'
+// ── Firebase Configuration ───────────────────────────────────────────────────
+const FIREBASE_DB_URL = 'https://amu-base-board-default-rtdb.firebaseio.com';
 
-function getTrackLikes() {
+// ── Track Likes & Sort (Global via Firebase REST API) ────────────────────────
+let currentTrackSort = 'newest'; // 'newest' | 'liked'
+let globalTrackLikeCounts = {}; // { trackId: number } — fetched from Firebase
+let trackLikesPollingInterval = null;
+
+// My own likes stored locally (to prevent double-liking)
+function getMyTrackLikes() {
     try {
-        const raw = localStorage.getItem('amu_track_likes');
+        const raw = localStorage.getItem('amu_my_track_likes');
         return raw ? JSON.parse(raw) : {};
     } catch (_) { return {}; }
 }
 
-function saveTrackLikes(likesObj) {
+function saveMyTrackLikes(obj) {
     try {
-        localStorage.setItem('amu_track_likes', JSON.stringify(likesObj));
+        localStorage.setItem('amu_my_track_likes', JSON.stringify(obj));
     } catch (_) {}
 }
 
-function toggleTrackLike(e, trackId) {
-    e.stopPropagation(); // don't trigger track selection
-    const likes = getTrackLikes();
-    if (likes[trackId]) {
-        delete likes[trackId];
-    } else {
-        likes[trackId] = true;
+// Fetch global like counts from Firebase
+async function fetchTrackLikesFromCloud() {
+    try {
+        const res = await fetch(FIREBASE_DB_URL + '/track_likes.json');
+        if (res.ok) {
+            const data = await res.json();
+            if (data && typeof data === 'object') {
+                globalTrackLikeCounts = data;
+            } else {
+                globalTrackLikeCounts = {};
+            }
+            renderTrackList();
+        }
+    } catch (e) {
+        console.warn('Track likes fetch error:', e);
     }
-    saveTrackLikes(likes);
-    renderTrackList();
+}
+
+async function toggleTrackLike(e, trackId) {
+    e.stopPropagation();
+
+    const myLikes = getMyTrackLikes();
+    const alreadyLiked = !!myLikes[trackId];
+    const currentCount = globalTrackLikeCounts[trackId] || 0;
+
+    if (alreadyLiked) {
+        // Unlike
+        delete myLikes[trackId];
+        globalTrackLikeCounts[trackId] = Math.max(0, currentCount - 1);
+    } else {
+        // Like
+        myLikes[trackId] = true;
+        globalTrackLikeCounts[trackId] = currentCount + 1;
+    }
+
+    saveMyTrackLikes(myLikes);
+    renderTrackList(); // optimistic update
+
+    // Sync to Firebase
+    try {
+        await fetch(FIREBASE_DB_URL + '/track_likes/' + encodeURIComponent(trackId) + '.json', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(globalTrackLikeCounts[trackId])
+        });
+    } catch (err) {
+        console.warn('Firebase track like sync error:', err);
+    }
 }
 
 function setTrackSort(sortType) {
@@ -1117,23 +1162,23 @@ function renderTrackList() {
     if (countEl) countEl.textContent = tracks.length;
     if (counterTracksEl) counterTracksEl.textContent = tracks.length;
 
-    const likes = getTrackLikes();
+    const myLikes = getMyTrackLikes();
 
     // Build sorted index list
     let sortedIndices = tracks.map((_, idx) => idx);
     if (currentTrackSort === 'liked') {
-        // Liked tracks first, then rest
         sortedIndices.sort((a, b) => {
-            const likedA = likes[tracks[a].id] ? 1 : 0;
-            const likedB = likes[tracks[b].id] ? 1 : 0;
-            return likedB - likedA;
+            const countA = globalTrackLikeCounts[tracks[a].id] || 0;
+            const countB = globalTrackLikeCounts[tracks[b].id] || 0;
+            return countB - countA;
         });
     }
 
     listEl.innerHTML = sortedIndices.map((idx) => {
         const track = tracks[idx];
         const isActive = idx === currentTrackIndex;
-        const isLiked = !!likes[track.id];
+        const isLiked = !!myLikes[track.id];
+        const likeCount = globalTrackLikeCounts[track.id] || 0;
         return `
             <div class="track-item ${isActive ? 'active' : ''}" onclick="selectTrack(${idx}, true)">
                 <span class="track-item-idx">${(idx + 1).toString().padStart(2, '0')}</span>
@@ -1152,7 +1197,8 @@ function renderTrackList() {
                 <button type="button" class="track-like-btn ${isLiked ? 'liked' : ''}"
                     onclick="toggleTrackLike(event, '${track.id}')"
                     title="${isLiked ? 'いいね解除' : 'いいね'}">
-                    ${isLiked ? '❤️' : '🤍'}
+                    <span class="track-like-icon">${isLiked ? '❤️' : '🤍'}</span>
+                    ${likeCount > 0 ? `<span class="track-like-count">${likeCount}</span>` : ''}
                 </button>
             </div>
         `;
@@ -1345,6 +1391,12 @@ function initMusicStation() {
     setTimeout(() => {
         applySunoPlaylist(true);
     }, 200);
+
+    // Fetch global track likes from Firebase and poll periodically
+    fetchTrackLikesFromCloud();
+    if (!trackLikesPollingInterval) {
+        trackLikesPollingInterval = setInterval(fetchTrackLikesFromCloud, 15000);
+    }
 }
 
 // ── Native App Deep Link Handler ──────────────────────────────────────────────
@@ -1370,7 +1422,6 @@ function openXApp(e) {
 }
 
 // ── Firebase REST API Board (Global Real-time Sharing) ────────────────────────
-const FIREBASE_DB_URL = 'https://amu-base-board-default-rtdb.firebaseio.com';
 let selectedAvatar = '🚀';
 let currentBoardSort = 'newest';
 let cloudPostsCache = [];
