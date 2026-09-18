@@ -1383,7 +1383,7 @@ async function initVisitorCounter() {
     const heroEl = document.getElementById('hero-visitors-num');
 
     try {
-        const res = await fetch('https://counterapi.com/api/v1/amu-base-official/visits/up');
+        const res = await fetch('https://counterapi.com/api/v1/amu-base-official/visits?action=up');
         if (res.ok) {
             const data = await res.json();
             const val = data.value || 1;
