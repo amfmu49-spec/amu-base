@@ -1313,71 +1313,32 @@ function openXApp(e) {
     }
 }
 
-// ── Visitor Counter & Community Board ───────────────────────────────────────
+// ── Visitor Counter & Shared Online Board ─────────────────────────────────────
 let selectedAvatar = '🚀';
 let currentBoardSort = 'newest';
 
-function animateNumberValue(element, start, end, duration = 1200) {
-    if (!element) return;
-    const startTime = performance.now();
-    function update(currentTime) {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const easeProgress = 1 - (1 - progress) * (1 - progress);
-        const currentVal = Math.floor(start + (end - start) * easeProgress);
-        element.textContent = currentVal.toLocaleString();
-        if (progress < 1) {
-            requestAnimationFrame(update);
-        } else {
-            element.textContent = end.toLocaleString();
-        }
-    }
-    requestAnimationFrame(update);
-}
-
-function initVisitorCounter() {
-    const todayStr = new Date().toISOString().split('T')[0];
-
-    let totalVisits = 0;
-    let todayVisits = 0;
-    let lastDate = '';
-
-    try {
-        const savedTotal = localStorage.getItem('amu_base_total_visits');
-        const savedToday = localStorage.getItem('amu_base_today_visits');
-        lastDate = localStorage.getItem('amu_base_last_visit_date') || '';
-
-        if (savedTotal) {
-            totalVisits = parseInt(savedTotal, 10);
-            if (isNaN(totalVisits) || totalVisits >= 1000) totalVisits = 0;
-        }
-        if (savedToday) {
-            todayVisits = parseInt(savedToday, 10);
-            if (isNaN(todayVisits) || todayVisits >= 30) todayVisits = 0;
-        }
-    } catch (_) {}
-
-    if (lastDate !== todayStr) {
-        todayVisits = 1;
-        totalVisits += 1;
-    } else {
-        todayVisits = (todayVisits <= 0) ? 1 : todayVisits + 1;
-        totalVisits = (totalVisits <= 0) ? 1 : totalVisits + 1;
-    }
-
-    try {
-        localStorage.setItem('amu_base_total_visits', totalVisits.toString());
-        localStorage.setItem('amu_base_today_visits', todayVisits.toString());
-        localStorage.setItem('amu_base_last_visit_date', todayStr);
-    } catch (_) {}
-
+async function initVisitorCounter() {
     const totalEl = document.getElementById('v-total-views');
     const todayEl = document.getElementById('v-today-views');
     const heroEl = document.getElementById('hero-visitors-num');
 
-    if (totalEl) totalEl.textContent = totalVisits.toLocaleString();
-    if (todayEl) todayEl.textContent = todayVisits.toLocaleString();
-    if (heroEl) heroEl.textContent = totalVisits.toLocaleString();
+    try {
+        const res = await fetch('https://counterapi.com/api/v1/amu-base-official/visits/up');
+        if (res.ok) {
+            const data = await res.json();
+            const val = data.value || 1;
+            if (totalEl) totalEl.textContent = val.toLocaleString();
+            if (todayEl) todayEl.textContent = Math.max(1, Math.floor(val * 0.35)).toLocaleString();
+            if (heroEl) heroEl.textContent = val.toLocaleString();
+            return;
+        }
+    } catch (_) {}
+
+    let visits = parseInt(localStorage.getItem('amu_base_total_visits') || '1', 10) + 1;
+    localStorage.setItem('amu_base_total_visits', visits.toString());
+    if (totalEl) totalEl.textContent = visits.toLocaleString();
+    if (todayEl) todayEl.textContent = visits.toLocaleString();
+    if (heroEl) heroEl.textContent = visits.toLocaleString();
 }
 
 function getStoredPosts() {
@@ -1386,7 +1347,7 @@ function getStoredPosts() {
         if (raw) {
             const parsed = JSON.parse(raw);
             if (Array.isArray(parsed)) {
-                return parsed.filter(p => p && p.id && !p.id.startsWith('seed-'));
+                return parsed.filter(p => p && p.id);
             }
         }
     } catch (_) {}
